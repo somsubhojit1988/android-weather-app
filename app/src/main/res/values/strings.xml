@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Weather Application</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date_today">01/06/2020, Monday</string>
+    <string name="feels_like">Feels like</string>
+    <string name="temperature_text">34.5\u00B0 C</string>
+    <string name="maximum_temperature">Maximum </string>
+    <string name="minimum_temperature">Minimum </string>
+    <string name="weather_icon">Weather icon</string>
+    <string name="temperature_template">%.2f\u00B0 C</string>
+    <string name="light_rain">Light rain</string>
+</resources>

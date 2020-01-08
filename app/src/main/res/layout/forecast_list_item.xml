@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="forecast"
+            type="com.example.weatherapplication.overview.Forecast" />
+
+        <variable
+            name="forecastListener"
+            type="com.example.weatherapplication.overview.ForecastListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="8dp"
+            android:onClick="@{() -> forecastListener.onClick(forecast)}">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/dateText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:bindDate="@{forecast.dt}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/date_today" />
+
+                <ImageView
+                    android:id="@+id/weatherForecastImg"
+                    android:layout_width="48dp"
+                    android:layout_height="48sp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="@string/weather_icon"
+                    app:layout_constraintEnd_toStartOf="@id/foreCastMaxTempLabel"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dateText"
+                    tools:src="@string/temperature_text"
+                    tools:srcCompat="@drawable/ic_sleet"
+                    app:weatherImage="@{forecast.icon}"
+                    />
+
+                <TextView
+                    android:id="@+id/forecastDescription"
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{forecast.description}"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/weatherForecastImg"
+                    app:layout_constraintStart_toStartOf="@id/weatherForecastImg"
+                    app:layout_constraintTop_toBottomOf="@id/weatherForecastImg"
+                    tools:text="@string/light_rain" />
+
+                <TextView
+                    android:id="@+id/foreCastMaxTempLabel"
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/foreCastMaxTemp"
+                    app:layout_constraintEnd_toStartOf="@+id/foreCastMaxTemp"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintStart_toEndOf="@id/weatherForecastImg"
+                    app:layout_constraintTop_toTopOf="@id/foreCastMaxTemp"
+                    android:text="@string/maximum_temperature" />
+
+
+                <TextView
+                    android:id="@+id/foreCastMaxTemp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@{@string/temperature_template(forecast.maxTemp)}"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/foreCastMaxTempLabel"
+                    app:layout_constraintTop_toTopOf="@id/weatherForecastImg"
+                    tools:text="@string/temperature_text" />
+
+
+                <TextView
+                    android:id="@+id/foreCastMinTempLabel"
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBaseline_toBaselineOf="@id/foreCastMinTemp"
+                    app:layout_constraintEnd_toStartOf="@+id/foreCastMinTemp"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintStart_toStartOf="@id/foreCastMaxTempLabel"
+                    app:layout_constraintTop_toTopOf="@id/foreCastMinTemp"
+                    android:text="@string/minimum_temperature" />
+
+
+                <TextView
+                    android:id="@+id/foreCastMinTemp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@{@string/temperature_template(forecast.minTemp)}"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/foreCastMinTempLabel"
+                    app:layout_constraintTop_toBottomOf="@id/foreCastMaxTemp"
+                    tools:text="@string/temperature_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+</layout>

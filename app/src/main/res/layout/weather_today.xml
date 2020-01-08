@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="currentWeather"
+            type="com.example.weatherapplication.overview.CurrentWeather" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/weatherForecastImg"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toTopOf="@id/weatherDesc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/dateText"
+                    app:layout_constraintTop_toTopOf="@+id/dateText"
+                    tools:srcCompat="@drawable/ic_clear_day"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/weather_icon"
+                    app:weatherImage="@{currentWeather.icon}"/>
+
+                <TextView
+                    android:id="@+id/weatherDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/weatherForecastImg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/weatherForecastImg"
+                    app:layout_constraintEnd_toEndOf="@id/weatherForecastImg"
+                    android:textAlignment="center"
+                    tools:text="@string/light_rain"
+                    android:text="@{currentWeather.description}"/>
+
+                <TextView
+                    android:id="@+id/dateText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/weatherForecastImg"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/date_today"
+                    app:bindDate="@{currentWeather.dt}"/>
+
+
+                <TextView
+                    android:id="@+id/temperatureNowText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="32sp"
+
+                    app:layout_constraintEnd_toEndOf="@id/dateText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dateText"
+                    tools:text="@string/temperature_text"
+                    android:text="@{@string/temperature_template(currentWeather.temperature)}"/>
+
+                <TextView
+                    android:id="@+id/feelsLikeLabel"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/feelsLikeTemperature"
+                    app:layout_constraintEnd_toStartOf="@+id/feelsLikeTemperature"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/feelsLikeTemperature"
+                    android:text="@string/feels_like" />
+
+                <TextView
+                    android:id="@+id/feelsLikeTemperature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@id/weatherForecastImg"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/feelsLikeLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/temperatureNowText"
+                    tools:text="@string/temperature_text"
+                    android:text="@{@string/temperature_template(currentWeather.apparentTemperature)}"/>
+
+                <TextView
+                    android:id="@+id/maxTemperatureLabel"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/maximum_temperature"
+                    app:layout_constraintBaseline_toBaselineOf="@id/maxTemperature"
+                    app:layout_constraintEnd_toStartOf="@id/maxTemperature"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="@id/feelsLikeLabel"
+                    app:layout_constraintTop_toTopOf="@id/maxTemperature" />
+
+                <TextView
+                    android:id="@+id/maxTemperature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    tools:text="@string/temperature_text"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@id/feelsLikeTemperature"
+                    app:layout_constraintStart_toEndOf="@id/maxTemperatureLabel"
+                    app:layout_constraintTop_toBottomOf="@id/feelsLikeTemperature"
+                    android:text="@{@string/temperature_template(currentWeather.maxTemp)}" />
+
+
+                <TextView
+                    android:id="@+id/minTemperatureLabel"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minimum_temperature"
+                    app:layout_constraintBaseline_toBaselineOf="@id/minTemperature"
+                    app:layout_constraintEnd_toStartOf="@id/minTemperature"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="@id/maxTemperatureLabel"
+                    app:layout_constraintTop_toTopOf="@id/minTemperature" />
+
+                <TextView
+                    android:id="@+id/minTemperature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    tools:text="@string/temperature_text"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@id/maxTemperature"
+                    app:layout_constraintStart_toEndOf="@id/minTemperatureLabel"
+                    app:layout_constraintTop_toBottomOf="@id/maxTemperature"
+                    android:text="@{@string/temperature_template(currentWeather.minTemp)}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+</layout>
