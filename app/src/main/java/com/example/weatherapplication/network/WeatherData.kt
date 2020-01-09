@@ -3,6 +3,7 @@ package com.example.weatherapplication.network
 import com.squareup.moshi.Json
 
 
+
 data class Current(
     @Json(name = "time") val time: Long,
     @Json(name = "summary") val summary: String,
