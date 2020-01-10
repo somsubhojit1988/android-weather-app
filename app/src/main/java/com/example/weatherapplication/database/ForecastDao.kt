@@ -22,5 +22,5 @@ interface ForecastDao {
     fun clear()
 
     @Query("select * from forecasts where dt > :timeStamp order by dt")
-    fun getForecasts(timeStamp:Long = 0L) : LiveData<List<ForecastEntity>?>
+    fun getForecasts(timeStamp:Long = 0L) : LiveData<List<ForecastEntity>>
 }

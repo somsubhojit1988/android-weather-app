@@ -27,7 +27,7 @@ class WeatherRepository(weatherDb: WeatherDb) {
         it?.asDomainModel()
     }
 
-    suspend fun refreshWeatherReport(latitude: Double = 34.002470, longitude: Double = -84.180720) {
+    suspend fun refreshWeatherReport(latitude: Double, longitude: Double) {
         withContext(Dispatchers.IO) {
             WeatherForecastService.srvc.getWeatherForecast(
                 BuildConfig.DARKSKY_APPID,
@@ -35,11 +35,12 @@ class WeatherRepository(weatherDb: WeatherDb) {
                 longitude
             ).await().apply {
                 asWeatherEntity().let {
+                    weatherDao.clear()
                     weatherDao.insert(it)
-                    weatherDao.cleanOlder(it.dt)
                 }
             }.apply {
                 asForecastEntity().let {
+                    forecastDao.clear()
                     forecastDao.insert(it)
                 }
             }

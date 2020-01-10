@@ -2,13 +2,12 @@ package com.example.weatherapplication.overview
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentWeatherOverviewBinding
 import com.example.weatherapplication.formatDate
 
@@ -51,8 +50,23 @@ class WeatherOverviewFragment : Fragment() {
             }
         })
 
+        setHasOptionsMenu(true)
+
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.options_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.refresh -> {
+            Toast.makeText(context, "will refresh now", Toast.LENGTH_SHORT).show()
+            viewModel.onRefresh()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
 
 }

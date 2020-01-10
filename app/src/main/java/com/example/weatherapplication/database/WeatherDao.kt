@@ -1,14 +1,11 @@
 package com.example.weatherapplication.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface WeatherDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(weather: WeatherEntity)
 
     @Update
@@ -21,7 +18,7 @@ interface WeatherDao {
     fun getToday(): LiveData<WeatherEntity?>
 
     @Query("select * from current_weather_data where dt < :dt order by dt desc")
-    fun getOlder(dt: Long): List<WeatherEntity>?
+    fun getOlder(dt: Long): List<WeatherEntity>
 
     @Query(value = "delete from current_weather_data")
     fun clear()

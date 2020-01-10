@@ -25,23 +25,41 @@ class WeatheroverviewViewModel(application: Application) : AndroidViewModel(appl
 
     private val _errorMessage = MutableLiveData<String>()
 
+    private val _refreshing: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    private var _latitude :Double = 34.002470
+
+    private var _longitude: Double = -84.180720
+
+    val refreshing :LiveData<Boolean>
+        get() = _refreshing
+
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
     init {
-        refreshDataFromRepo()
+        refreshWeatherDataFromRepo()
     }
 
-    private fun refreshDataFromRepo() {
+    fun onRefresh() {
+        refreshWeatherDataFromRepo()
+    }
+
+
+    private fun refreshWeatherDataFromRepo(latitude: Double = 34.002470, longitude: Double = -84.180720) {
         coroutineScope.launch {
             try {
-                repository.refreshWeatherReport()
+                _refreshing.value = true
+                repository.refreshWeatherReport(latitude, longitude)
+                Timber.d("data fetched from repository >>")
             } catch (e: IOException) {
                 "error fetching Weather API: ${e.message}".apply {
                     _errorMessage.value = this
                     Timber.e(this)
                 }
                 e.printStackTrace()
+            } finally {
+                _refreshing.value = false
             }
         }
     }
