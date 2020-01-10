@@ -1,17 +1,37 @@
 package com.example.weatherapplication.database
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.weatherapplication.network.Current
+import com.example.weatherapplication.overview.CurrentWeather
+import com.example.weatherapplication.overview.Forecast
+
 
 @Entity(tableName = "current_weather_data")
-data class Weather(
-    @PrimaryKey var fetchDt: Long,
-    var latitude: Double,
-    var longitude: Double,
-    @Embedded var currentWeather: Current
+data class WeatherEntity(
+    @PrimaryKey var dt: Long,
+    val latitude: Double,
+    val longitude: Double,
+    val summary: String,
+    val icon: String,
+    val temperature: Double,
+    val maxTemperature: Double,
+    val minTemperature: Double,
+    val apparentTemperature: Double,
+    val humidity: Double,
+    val windSpeed: Double
 )
+
+fun WeatherEntity.asDomainModel(): CurrentWeather =
+    CurrentWeather(
+        dt = dt,
+        temperature = temperature,
+        apparentTemperature = apparentTemperature,
+        description = summary,
+        maxTemp = maxTemperature,
+        minTemp = minTemperature,
+        icon = icon
+    )
+
 
 @Entity(tableName = "forecasts")
 data class ForecastEntity(
@@ -26,3 +46,15 @@ data class ForecastEntity(
     var temperatureMax: Double,
     var cloudCover: Double
 )
+
+fun List<ForecastEntity>.asDomainModel(): List<Forecast> =
+    map {
+        Forecast(
+            dt = it.dt,
+            description = it.summary,
+            maxTemp = it.temperatureMax,
+            minTemp = it.temperatureMin,
+            icon = it.icon
+        )
+    }
+

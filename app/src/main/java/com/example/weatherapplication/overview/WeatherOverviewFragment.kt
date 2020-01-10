@@ -17,8 +17,13 @@ import com.example.weatherapplication.formatDate
  */
 class WeatherOverviewFragment : Fragment() {
 
-    private val viewModel: WeatherOverviewViewModel by lazy {
-        ViewModelProviders.of(this)[WeatherOverviewViewModel::class.java]
+    private val viewModel: WeatheroverviewViewModel by lazy {
+        requireNotNull(activity).let { activity ->
+            ViewModelProviders.of(
+                this,
+                WeatheroverviewViewModel.Factory(activity.application)
+            )[WeatheroverviewViewModel::class.java]
+        }
     }
 
     override fun onCreateView(
@@ -40,8 +45,7 @@ class WeatherOverviewFragment : Fragment() {
                 .show()
         })
         binding.forecastList.adapter = forecastAdapter
-
-        viewModel.foreCast.observe(this, Observer {
+        viewModel.forecast.observe(this, Observer {
             it?.let {
                 forecastAdapter.submitList(it)
             }

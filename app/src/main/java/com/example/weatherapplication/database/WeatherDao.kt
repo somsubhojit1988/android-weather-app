@@ -9,25 +9,24 @@ import androidx.room.Update
 @Dao
 interface WeatherDao {
     @Insert
-    fun insert(weather: Weather)
+    fun insert(weather: WeatherEntity)
 
     @Update
-    fun update(weather: Weather)
+    fun update(weather: WeatherEntity)
 
-    @Query("select * from current_weather_data where fetchDt = :dt")
-    fun get(dt: Long): Weather?
+    @Query("select * from current_weather_data where dt = :dt")
+    fun get(dt: Long): WeatherEntity?
 
-    @Query(value = "select * from current_weather_data order by fetchDt desc limit 1")
-    fun getToday(): LiveData<Weather?>
+    @Query(value = "select * from current_weather_data order by dt desc limit 1")
+    fun getToday(): LiveData<WeatherEntity?>
 
-    @Query("select * from current_weather_data where fetchDt < :dt order by fetchDt desc")
-    fun getOlder(dt: Long): List<Weather>?
+    @Query("select * from current_weather_data where dt < :dt order by dt desc")
+    fun getOlder(dt: Long): List<WeatherEntity>?
 
     @Query(value = "delete from current_weather_data")
     fun clear()
 
-    // clean all but today
-    @Query("delete from current_weather_data where fetchDt < :dt")
+    @Query("delete from current_weather_data where dt < :dt")
     fun cleanOlder(dt: Long)
 }
 
