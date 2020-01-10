@@ -14,15 +14,15 @@ data class Weather(
 )
 
 @Entity(tableName = "forecasts")
-data class Forecast(
+data class ForecastEntity(
     @PrimaryKey val dt: Long,
-    val summary: String,
-    val icon: String,
-    val sunriseTime: Long,
-    val sunsetTime: Long,
-    val temperatureHigh: Double,
-    val temperatureLow: Double,
-    val temperatureMin: Double,
-    val temperatureMax: Double,
-    val cloudCover: Double
+    var summary: String,
+    var icon: String,
+    var sunriseTime: Long,
+    var sunsetTime: Long,
+    var temperatureHigh: Double,
+    var temperatureLow: Double,
+    var temperatureMin: Double,
+    var temperatureMax: Double,
+    var cloudCover: Double
 )

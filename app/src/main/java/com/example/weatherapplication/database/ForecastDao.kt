@@ -9,17 +9,18 @@ import androidx.room.Update
 @Dao
 interface ForecastDao {
     @Insert
-    fun insert(forecast: Forecast)
+    fun insert(forecast: ForecastEntity)
 
     @Update
-    fun update(forecast: Forecast)
+    fun update(forecast: ForecastEntity)
 
     @Query("select * from forecasts where dt = :dt")
-    fun get(dt: Long) :Forecast
+    fun get(dt: Long) :ForecastEntity
 
     @Query("delete from forecasts")
     fun clear()
 
-    @Query("select * from forecasts where dt > :timeStamp")
-    fun getForecasts(timeStamp:Long) : LiveData<List<Forecast>>
+    @Query("select * from forecasts where dt > :timeStamp order by dt desc")
+    fun getForecasts(timeStamp:Long = 0L) : LiveData<List<ForecastEntity>?>
+//    fun getForecasts(timeStamp:Long = 0L) : List<ForecastEntity>?
 }

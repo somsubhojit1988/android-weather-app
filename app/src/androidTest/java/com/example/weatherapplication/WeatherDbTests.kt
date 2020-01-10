@@ -1,6 +1,7 @@
 package com.example.weatherapplication
 
 import android.content.Context
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,6 +9,7 @@ import com.example.weatherapplication.database.WeatherDao
 import com.example.weatherapplication.database.WeatherDb
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -23,6 +25,9 @@ class WeatherDbTests {
     private lateinit var weatherDao: WeatherDao
 
     private lateinit var dB: WeatherDb
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun createDb() {
@@ -62,9 +67,10 @@ class WeatherDbTests {
             fetchDt -= ONE_DAY
         }
         weatherDao.insert(weatherObj)
-        val weatherToday = weatherDao.getToday()
+        val weatherToday = weatherDao.getToday().getOrAwaitValue()
+            ?: throw IllegalArgumentException("Could not fetch today from dB")
 
-        assert(weatherToday.value?.fetchDt == timeNow)
+        assert(weatherToday.fetchDt == timeNow)
     }
 
     @Test
@@ -122,7 +128,8 @@ class WeatherDbTests {
                 fetchDt -= 3 * ONE_DAY
             })
         }
-        assert(weatherDao.getOlder(weatherObj.fetchDt)?.size == 2)
+        val res = weatherDao.getOlder(weatherObj.fetchDt)?.size ?: 0
+        assert(res == 2)
     }
 
     @Test
