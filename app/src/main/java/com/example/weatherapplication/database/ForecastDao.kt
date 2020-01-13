@@ -18,6 +18,9 @@ interface ForecastDao {
     @Query("select * from forecasts where dt = :dt")
     fun get(dt: Long) :ForecastEntity
 
+    @Query("select * from forecasts where dt = :dt")
+    fun getLive(dt:Long) :LiveData<ForecastEntity>
+
     @Query("delete from forecasts")
     fun clear()
 

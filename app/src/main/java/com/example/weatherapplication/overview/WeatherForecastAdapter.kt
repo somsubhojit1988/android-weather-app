@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.databinding.ForecastListItemBinding
+import com.example.weatherapplication.model.Forecast
 
 class ForecastViewHolder private constructor(val binding: ForecastListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {

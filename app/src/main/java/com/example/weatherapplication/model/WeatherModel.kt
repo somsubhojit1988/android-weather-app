@@ -1,4 +1,4 @@
-package com.example.weatherapplication.overview
+package com.example.weatherapplication.model
 
 data class CurrentWeather(
     val dt: Long,

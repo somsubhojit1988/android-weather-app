@@ -2,8 +2,8 @@ package com.example.weatherapplication.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.weatherapplication.overview.CurrentWeather
-import com.example.weatherapplication.overview.Forecast
+import com.example.weatherapplication.model.CurrentWeather
+import com.example.weatherapplication.model.Forecast
 
 
 @Entity(tableName = "current_weather_data")
@@ -47,14 +47,16 @@ data class ForecastEntity(
     var cloudCover: Double
 )
 
+fun ForecastEntity.asDomainModel() :Forecast = Forecast(
+    dt = this.dt,
+    description = this.summary,
+    maxTemp = this.temperatureMax,
+    minTemp = this.temperatureMin,
+    icon = this.icon
+)
+
 fun List<ForecastEntity>.asDomainModel(): List<Forecast> =
     map {
-        Forecast(
-            dt = it.dt,
-            description = it.summary,
-            maxTemp = it.temperatureMax,
-            minTemp = it.temperatureMin,
-            icon = it.icon
-        )
+        it.asDomainModel()
     }
 

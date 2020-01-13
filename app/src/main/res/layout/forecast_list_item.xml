@@ -7,7 +7,7 @@
 
         <variable
             name="forecast"
-            type="com.example.weatherapplication.overview.Forecast" />
+            type="com.example.weatherapplication.model.Forecast" />
 
         <variable
             name="forecastListener"

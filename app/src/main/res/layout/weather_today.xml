@@ -6,7 +6,7 @@
     <data>
         <variable
             name="currentWeather"
-            type="com.example.weatherapplication.overview.CurrentWeather" />
+            type="com.example.weatherapplication.model.CurrentWeather" />
     </data>
 
     <FrameLayout

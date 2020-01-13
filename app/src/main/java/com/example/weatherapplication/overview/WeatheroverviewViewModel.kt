@@ -3,6 +3,8 @@ package com.example.weatherapplication.overview
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.weatherapplication.database.WeatherDb
+import com.example.weatherapplication.model.CurrentWeather
+import com.example.weatherapplication.model.Forecast
 import com.example.weatherapplication.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +19,7 @@ class WeatheroverviewViewModel(application: Application) : AndroidViewModel(appl
     private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
 
     private val repository =
-        WeatherRepository(WeatherDb.getInstance(application.applicationContext))
+        WeatherRepository.getInstance(WeatherDb.getInstance(application.applicationContext))
 
     val currentWeather: LiveData<CurrentWeather> = repository.currentWeather
 
@@ -26,10 +28,6 @@ class WeatheroverviewViewModel(application: Application) : AndroidViewModel(appl
     private val _errorMessage = MutableLiveData<String>()
 
     private val _refreshing: MutableLiveData<Boolean> = MutableLiveData(false)
-
-    private var _latitude :Double = 34.002470
-
-    private var _longitude: Double = -84.180720
 
     val refreshing :LiveData<Boolean>
         get() = _refreshing
