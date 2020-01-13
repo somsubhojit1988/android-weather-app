@@ -29,7 +29,7 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
     suspend fun refreshWeatherReport(latitude: Double, longitude: Double) {
         withContext(Dispatchers.IO) {
-            WeatherForecastService.srvc.getWeatherForecastAsync(
+            WeatherForecastService.weatherReportService.getWeatherForecastAsync(
                 BuildConfig.DARKSKY_APPID,
                 latitude,
                 longitude
