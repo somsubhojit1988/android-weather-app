@@ -1,6 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".forecastdetails.ForecastDetailsFragment"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.weatherapplication.forecastdetails.ForecastDetailsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".forecastdetails.ForecastDetailsFragment">
+
+        <TextView
+            android:id="@+id/forecastDt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textSize="30sp"
+            android:layout_marginTop="96dp"
+            app:bindDate="@{viewModel.forecast.dt}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/date_today" />
+
+        <ImageView
+            android:id="@+id/imageForecast"
+            android:layout_width="124dp"
+            android:layout_height="124dp"
+            android:layout_marginEnd="16dp"
+            tools:src="@drawable/ic_clear_day"
+            app:weatherImage = "@{viewModel.forecast.icon}"
+            android:contentDescription="@string/weather_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textSummary" />
+
+        <TextView
+            android:id="@+id/textSummary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            tools:text="@string/rainy"
+            android:text="@{viewModel.forecast.description}"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageForecast"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forecastDt" />
+
+        <TextView
+            android:id="@+id/forecastMaxLabel"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:text="@string/maximum_temperature"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/textMaxTemp"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textSummary"
+            app:layout_constraintBaseline_toBaselineOf="@id/textMaxTemp"/>
+
+        <TextView
+            android:id="@+id/textMaxTemp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/textSummary"
+            app:layout_constraintStart_toEndOf="@+id/forecastMaxLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textSummary"
+            tools:text="@string/temperature_text"
+            android:text="@{@string/temperature_template(viewModel.forecast.maxTemp)}" />
+
+
+
+        <TextView
+            android:id="@+id/forecastMinLabel"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:text="@string/minimum_temperature"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/textMinTemp"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textMinTemp"
+            app:layout_constraintBaseline_toBaselineOf="@id/textMinTemp"/>
+
+        <TextView
+            android:id="@+id/textMinTemp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/textSummary"
+            app:layout_constraintStart_toEndOf="@+id/forecastMinLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textMaxTemp"
+            tools:text="@string/temperature_text"
+            android:text="@{@string/temperature_template(viewModel.forecast.minTemp)}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

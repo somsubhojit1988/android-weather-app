@@ -21,6 +21,14 @@
         tools:layout="@layout/fragment_forecast_details" >
         <action
             android:id="@+id/action_forecastDetailsFragment_to_weatherOverviewFragment"
-            app:destination="@id/weatherOverviewFragment" />
+            app:destination="@id/weatherOverviewFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="forecastDt"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 </navigation>

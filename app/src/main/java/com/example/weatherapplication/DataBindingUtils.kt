@@ -5,9 +5,10 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("bindDate")
-fun bindDate(textView: TextView, dt: Long) {
-    textView.text = dt.formatDate()
+fun TextView.bindDate(dt:Long) {
+    text = dt.formatDate()
 }
+
 
 @BindingAdapter("weatherImage")
 fun ImageView.bindWeatherImage(type: String?) {

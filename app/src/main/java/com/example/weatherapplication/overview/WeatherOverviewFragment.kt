@@ -7,8 +7,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentWeatherOverviewBinding
+import com.example.weatherapplication.forecastdetails.ForecastDetailsFragmentDirections
 import com.example.weatherapplication.formatDate
 
 /**
@@ -42,6 +44,9 @@ class WeatherOverviewFragment : Fragment() {
         val forecastAdapter = WeatherForecastAdapter(ForecastListener {
             Toast.makeText(context, "Selected forecast for ${it.formatDate()}", Toast.LENGTH_LONG)
                 .show()
+            val action = WeatherOverviewFragmentDirections.
+                actionWeatherOverviewFragmentToForecastDetailsFragment(it)
+            findNavController().navigate(action)
         })
         binding.forecastList.adapter = forecastAdapter
         viewModel.forecast.observe(this, Observer {

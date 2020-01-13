@@ -10,4 +10,6 @@
     <string name="temperature_template">%.2f\u00B0 C</string>
     <string name="light_rain">Light rain</string>
     <string name="refresh">Refresh</string>
+    <string name="forecastDt">Forecast time: %d</string>
+    <string name="rainy">Rainy</string>
 </resources>

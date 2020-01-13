@@ -5,15 +5,15 @@ import androidx.lifecycle.Transformations
 import com.example.weatherapplication.BuildConfig
 import com.example.weatherapplication.database.WeatherDb
 import com.example.weatherapplication.database.asDomainModel
+import com.example.weatherapplication.model.CurrentWeather
+import com.example.weatherapplication.model.Forecast
 import com.example.weatherapplication.network.WeatherForecastService
 import com.example.weatherapplication.network.asForecastEntity
 import com.example.weatherapplication.network.asWeatherEntity
-import com.example.weatherapplication.overview.CurrentWeather
-import com.example.weatherapplication.overview.Forecast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class WeatherRepository(weatherDb: WeatherDb) {
+class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
     private val weatherDao = weatherDb.weatherDbDao
 
@@ -43,6 +43,25 @@ class WeatherRepository(weatherDb: WeatherDb) {
                     forecastDao.clear()
                     forecastDao.insert(it)
                 }
+            }
+        }
+    }
+
+
+    fun getForecastOf(dt: Long): LiveData<Forecast> = Transformations.map(forecastDao.getLive(dt)) {
+        //        Timber.d("observer forecast entity: ${it?.toString()}")
+        it.asDomainModel()
+    }
+
+    companion object {
+        private var mInstance: WeatherRepository? = null
+
+        fun getInstance(dB: WeatherDb): WeatherRepository {
+            synchronized(this) {
+                if (mInstance == null) {
+                    mInstance = WeatherRepository(dB)
+                }
+                return mInstance as WeatherRepository
             }
         }
     }

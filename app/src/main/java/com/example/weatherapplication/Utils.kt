@@ -1,7 +1,7 @@
 package com.example.weatherapplication
 
 import com.example.weatherapplication.network.WeatherResponse
-import com.example.weatherapplication.overview.Forecast
+import com.example.weatherapplication.model.Forecast
 import java.text.SimpleDateFormat
 import java.util.*
 
