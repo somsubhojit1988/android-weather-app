@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.databinding.ForecastListItemBinding
 import com.example.weatherapplication.model.Forecast
 
-class ForecastViewHolder private constructor(val binding: ForecastListItemBinding) :
+class ForecastViewHolder private constructor(private val binding: ForecastListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
 
