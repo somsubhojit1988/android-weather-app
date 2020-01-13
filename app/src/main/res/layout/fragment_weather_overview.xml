@@ -8,7 +8,7 @@
 
         <variable
             name="weatherViewModel"
-            type="com.example.weatherapplication.overview.WeatherOverviewViewModel" />
+            type="com.example.weatherapplication.overview.WeatheroverviewViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
