@@ -29,11 +29,11 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
     suspend fun refreshWeatherReport(latitude: Double, longitude: Double) {
         withContext(Dispatchers.IO) {
-            WeatherForecastService.srvc.getWeatherForecast(
+            WeatherForecastService.srvc.getWeatherForecastAsync(
                 BuildConfig.DARKSKY_APPID,
                 latitude,
                 longitude
-            ).await().apply {
+            ).apply {
                 asWeatherEntity().let {
                     weatherDao.clear()
                     weatherDao.insert(it)
@@ -47,9 +47,7 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
         }
     }
 
-
     fun getForecastOf(dt: Long): LiveData<Forecast> = Transformations.map(forecastDao.getLive(dt)) {
-        //        Timber.d("observer forecast entity: ${it?.toString()}")
         it.asDomainModel()
     }
 
@@ -64,5 +62,6 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
                 return mInstance as WeatherRepository
             }
         }
+
     }
 }

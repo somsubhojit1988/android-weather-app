@@ -5,7 +5,6 @@ import androidx.room.*
 
 @Dao
 interface ForecastDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(forecast: ForecastEntity)
 
