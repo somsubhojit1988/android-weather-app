@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
-import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentForecastDetailsBinding
 import timber.log.Timber
 

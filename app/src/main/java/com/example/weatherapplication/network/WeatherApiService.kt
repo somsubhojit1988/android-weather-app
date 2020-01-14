@@ -2,7 +2,6 @@ package com.example.weatherapplication.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -18,8 +17,6 @@ private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL).build()
-
-
 
 
 interface WeatherApiService {
@@ -56,7 +53,7 @@ object RxWeatherForecastService : BaseRetrofitBuilder {
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 
-    val weatherApiService :WeatherApiService  by lazy {
+    val weatherApiService: WeatherApiService by lazy {
         service.create(WeatherApiService::class.java)
     }
 }

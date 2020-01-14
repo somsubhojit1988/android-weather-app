@@ -6,12 +6,6 @@ import com.example.weatherapplication.database.WeatherDb
 import com.example.weatherapplication.model.CurrentWeather
 import com.example.weatherapplication.model.Forecast
 import com.example.weatherapplication.repository.WeatherRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.io.IOException
 
 class WeatheroverviewViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -26,7 +20,7 @@ class WeatheroverviewViewModel(application: Application) : AndroidViewModel(appl
 
     private val _refreshing: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    val refreshing :LiveData<Boolean>
+    val refreshing: LiveData<Boolean>
         get() = _refreshing
 
     val errorMessage: LiveData<String>
@@ -39,7 +33,11 @@ class WeatheroverviewViewModel(application: Application) : AndroidViewModel(appl
     fun onRefresh() {
         refreshWeatherDataFromRepo()
     }
-    private fun refreshWeatherDataFromRepo(latitude: Double = 34.002470, longitude: Double = -84.180720){
+
+    private fun refreshWeatherDataFromRepo(
+        latitude: Double = 34.002470,
+        longitude: Double = -84.180720
+    ) {
         repository.rxRefreshWeather(latitude, longitude)
     }
 

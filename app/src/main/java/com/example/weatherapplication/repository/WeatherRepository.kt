@@ -9,7 +9,10 @@ import com.example.weatherapplication.database.WeatherEntity
 import com.example.weatherapplication.database.asDomainModel
 import com.example.weatherapplication.model.CurrentWeather
 import com.example.weatherapplication.model.Forecast
-import com.example.weatherapplication.network.*
+import com.example.weatherapplication.network.RxWeatherForecastService
+import com.example.weatherapplication.network.WeatherResponse
+import com.example.weatherapplication.network.asForecastEntity
+import com.example.weatherapplication.network.asWeatherEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
@@ -51,10 +54,10 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
         }
 
     private val mObserver = Consumer<WeatherResponse> {
-        it?.apply {
+        it?.let {
             repositoryScope.launch {
-                persistWeather(asWeatherEntity())
-                persistForeCastList(asForecastEntity())
+                persistWeather(it.asWeatherEntity())
+                persistForeCastList(it.asForecastEntity())
             }
         }
     }
@@ -71,7 +74,7 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
     // need for Rx
     fun stopRefresh() {
-        mDisposable.takeIf {::mDisposable.isInitialized }?.let{
+        mDisposable.takeIf { ::mDisposable.isInitialized }?.let {
             mDisposable.dispose()
         }
         job.cancel()
@@ -82,6 +85,7 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
     }
 
     companion object {
+
         private var mInstance: WeatherRepository? = null
 
         fun getInstance(dB: WeatherDb): WeatherRepository {

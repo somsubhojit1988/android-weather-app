@@ -15,14 +15,14 @@ interface ForecastDao {
     fun update(forecast: ForecastEntity)
 
     @Query("select * from forecasts where dt = :dt")
-    fun get(dt: Long) :ForecastEntity
+    fun get(dt: Long): ForecastEntity
 
     @Query("select * from forecasts where dt = :dt")
-    fun getLive(dt:Long) :LiveData<ForecastEntity>
+    fun getLive(dt: Long): LiveData<ForecastEntity>
 
     @Query("delete from forecasts")
     fun clear()
 
     @Query("select * from forecasts where dt > :timeStamp order by dt")
-    fun getForecasts(timeStamp:Long = 0L) : LiveData<List<ForecastEntity>>
+    fun getForecasts(timeStamp: Long = 0L): LiveData<List<ForecastEntity>>
 }

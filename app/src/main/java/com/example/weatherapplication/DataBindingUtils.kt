@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("bindDate")
-fun TextView.bindDate(dt:Long) {
+fun TextView.bindDate(dt: Long) {
     text = dt.formatDate()
 }
 
