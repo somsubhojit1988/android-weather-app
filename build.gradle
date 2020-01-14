@@ -15,6 +15,10 @@ buildscript {
         androidXTestCoreVersion = '1.2.0'
         robolectricVersion = '4.3.1'
         archTestingVersion = '2.0.0'
+
+        rxJava_version = '2.2.9'
+        rxAndroid_version = '2.1.1'
+        rxAdapater_version = '2.5.0'
     }
 
     repositories {

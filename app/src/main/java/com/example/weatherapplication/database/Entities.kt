@@ -47,7 +47,7 @@ data class ForecastEntity(
     var cloudCover: Double
 )
 
-fun ForecastEntity.asDomainModel() :Forecast = Forecast(
+fun ForecastEntity.asDomainModel(): Forecast = Forecast(
     dt = this.dt,
     description = this.summary,
     maxTemp = this.temperatureMax,
@@ -59,4 +59,3 @@ fun List<ForecastEntity>.asDomainModel(): List<Forecast> =
     map {
         it.asDomainModel()
     }
-

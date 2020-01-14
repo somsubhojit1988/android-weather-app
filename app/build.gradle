@@ -13,6 +13,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    dependencies {
+        implementation 'androidx.multidex:multidex:2.0.1'
+    }
 
     defaultConfig {
         applicationId "com.example.weatherapplication"
@@ -23,6 +26,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "DARKSKY_APPID", DARKSKY_APPID
+        multiDexEnabled true  //ADD THIS LINE
     }
     buildTypes {
         release {
@@ -60,12 +64,12 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rxAdapater_version"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kt_coroutine_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kt_coroutine_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid_version"
 
     implementation "com.github.bumptech.glide:glide:$version_glide"
-
     // Room - persistence
     // Room and Lifecycle dependencies
     implementation "androidx.room:room-runtime:$room_version"
@@ -81,7 +85,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'android.arch.core:core-testing:1.1.1'
-
 
     // Android-X - JVM testing
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"

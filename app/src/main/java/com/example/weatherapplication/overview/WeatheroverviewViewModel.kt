@@ -14,9 +14,6 @@ import timber.log.Timber
 import java.io.IOException
 
 class WeatheroverviewViewModel(application: Application) : AndroidViewModel(application) {
-    private val job = Job()
-
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
 
     private val repository =
         WeatherRepository.getInstance(WeatherDb.getInstance(application.applicationContext))
@@ -42,29 +39,14 @@ class WeatheroverviewViewModel(application: Application) : AndroidViewModel(appl
     fun onRefresh() {
         refreshWeatherDataFromRepo()
     }
-
-
-    private fun refreshWeatherDataFromRepo(latitude: Double = 34.002470, longitude: Double = -84.180720) {
-        coroutineScope.launch {
-            try {
-                _refreshing.value = true
-                repository.refreshWeatherReport(latitude, longitude)
-                Timber.d("data fetched from repository >>")
-            } catch (e: IOException) {
-                "error fetching Weather API: ${e.message}".apply {
-                    _errorMessage.value = this
-                    Timber.e(this)
-                }
-                e.printStackTrace()
-            } finally {
-                _refreshing.value = false
-            }
-        }
+    private fun refreshWeatherDataFromRepo(latitude: Double = 34.002470, longitude: Double = -84.180720){
+        repository.rxRefreshWeather(latitude, longitude)
     }
+
 
     override fun onCleared() {
         super.onCleared()
-        job.cancel()
+        repository.stopRefresh()
     }
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {

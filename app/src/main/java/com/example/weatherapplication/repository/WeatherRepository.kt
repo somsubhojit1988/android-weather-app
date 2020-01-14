@@ -3,21 +3,32 @@ package com.example.weatherapplication.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.weatherapplication.BuildConfig
+import com.example.weatherapplication.database.ForecastEntity
 import com.example.weatherapplication.database.WeatherDb
+import com.example.weatherapplication.database.WeatherEntity
 import com.example.weatherapplication.database.asDomainModel
 import com.example.weatherapplication.model.CurrentWeather
 import com.example.weatherapplication.model.Forecast
-import com.example.weatherapplication.network.WeatherForecastService
-import com.example.weatherapplication.network.asForecastEntity
-import com.example.weatherapplication.network.asWeatherEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.example.weatherapplication.network.*
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 
 class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
     private val weatherDao = weatherDb.weatherDbDao
 
     private val forecastDao = weatherDb.forecastDao
+
+    private val rxForecastService = RxWeatherForecastService.weatherApiService
+
+    private lateinit var mDisposable: Disposable
+
+    private var job = Job()
+
+    private var repositoryScope = CoroutineScope(Dispatchers.IO + job)
 
     val currentWeather: LiveData<CurrentWeather> = Transformations.map(weatherDao.getToday()) {
         it?.asDomainModel()
@@ -27,24 +38,43 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
         it?.asDomainModel()
     }
 
-    suspend fun refreshWeatherReport(latitude: Double, longitude: Double) {
+    private suspend fun persistWeather(w: WeatherEntity) =
         withContext(Dispatchers.IO) {
-            WeatherForecastService.weatherReportService.getWeatherForecastAsync(
-                BuildConfig.DARKSKY_APPID,
-                latitude,
-                longitude
-            ).apply {
-                asWeatherEntity().let {
-                    weatherDao.clear()
-                    weatherDao.insert(it)
-                }
-            }.apply {
-                asForecastEntity().let {
-                    forecastDao.clear()
-                    forecastDao.insert(it)
-                }
+            weatherDao.clear()
+            weatherDao.insert(w)
+        }
+
+    private suspend fun persistForeCastList(l: List<ForecastEntity>) =
+        withContext(Dispatchers.IO) {
+            forecastDao.clear()
+            forecastDao.insert(l)
+        }
+
+    private val mObserver = Consumer<WeatherResponse> {
+        it?.apply {
+            repositoryScope.launch {
+                persistWeather(asWeatherEntity())
+                persistForeCastList(asForecastEntity())
             }
         }
+    }
+
+    // Rx-java Rest API call
+    fun rxRefreshWeather(latitude: Double, longitude: Double) {
+        mDisposable = rxForecastService.getWeatherForecast(
+            appId = BuildConfig.DARKSKY_APPID,
+            lat = latitude,
+            lon = longitude
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(mObserver)
+    }
+
+    // need for Rx
+    fun stopRefresh() {
+        mDisposable.takeIf {::mDisposable.isInitialized }?.let{
+            mDisposable.dispose()
+        }
+        job.cancel()
     }
 
     fun getForecastOf(dt: Long): LiveData<Forecast> = Transformations.map(forecastDao.getLive(dt)) {
