@@ -17,6 +17,7 @@ buildscript {
         rxJava_version = '2.2.9'
         rxAndroid_version = '2.1.1'
         rxAdapater_version = '2.5.0'
+        mockk_version = '1.9.1'
     }
 
     repositories {

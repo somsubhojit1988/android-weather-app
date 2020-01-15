@@ -14,7 +14,7 @@ class ForecastDetailsViewModel(application: Application, forecastDt: Long) :
 
     private val dB = WeatherDb.getInstance(application.applicationContext)
 
-    private val repository = WeatherRepository.getInstance(dB)
+    private val repository = WeatherRepository.getInstance(dB, {})
 
     val forecast: LiveData<Forecast> = repository.getForecastOf(forecastDt)
 

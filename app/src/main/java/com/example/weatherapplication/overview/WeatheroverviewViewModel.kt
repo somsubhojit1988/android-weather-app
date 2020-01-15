@@ -11,7 +11,9 @@ import com.example.weatherapplication.repository.WeatherRepository
 class WeatheroverviewViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository =
-        WeatherRepository.getInstance(WeatherDb.getInstance(application.applicationContext))
+        WeatherRepository.getInstance(
+            WeatherDb.getInstance(application.applicationContext)
+        ) { _refreshing.postValue(false) }
 
     val currentWeather: LiveData<CurrentWeather> = repository.currentWeather
 

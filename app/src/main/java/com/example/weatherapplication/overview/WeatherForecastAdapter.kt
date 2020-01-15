@@ -27,7 +27,7 @@ class ForecastViewHolder private constructor(private val binding: ForecastListIt
     }
 }
 
-class WeatherForecastAdapter(val clickListener: ForecastListener) :
+class WeatherForecastAdapter(private val clickListener: ForecastListener) :
     ListAdapter<Forecast, ForecastViewHolder>(ForecastDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ForecastViewHolder.from(parent)

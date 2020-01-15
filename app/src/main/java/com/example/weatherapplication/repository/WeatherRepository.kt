@@ -13,19 +13,22 @@ import com.example.weatherapplication.network.RxWeatherForecastService
 import com.example.weatherapplication.network.WeatherResponse
 import com.example.weatherapplication.network.asForecastEntity
 import com.example.weatherapplication.network.asWeatherEntity
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 
-class WeatherRepository private constructor(weatherDb: WeatherDb) {
-
+class WeatherRepository private constructor(
+    weatherDb: WeatherDb,
+    refreshDoneCallBack: (Boolean) -> Unit
+) {
     private val weatherDao = weatherDb.weatherDbDao
 
     private val forecastDao = weatherDb.forecastDao
 
     private val rxForecastService = RxWeatherForecastService.weatherApiService
 
-    private lateinit var mDisposable: Disposable
+    private var mDisposable = CompositeDisposable()
+
 
     val currentWeather: LiveData<CurrentWeather> = Transformations.map(weatherDao.getToday()) {
         it?.asDomainModel()
@@ -46,30 +49,32 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
     }
 
     private val mObserver = Consumer<WeatherResponse> {
-        it?.let {
-            persistWeather(it.asWeatherEntity())
-            persistForeCastList(it.asForecastEntity())
+        if (it == null) {
+            refreshDoneCallBack.invoke(false)
+            return@Consumer
         }
+        persistWeather(it.asWeatherEntity())
+        persistForeCastList(it.asForecastEntity())
+        refreshDoneCallBack.invoke(true)
     }
 
     // Rx-java Rest API call
     fun rxRefreshWeather(latitude: Double, longitude: Double) {
-        mDisposable = rxForecastService.getWeatherForecast(
-            appId = BuildConfig.DARKSKY_APPID,
-            lat = latitude,
-            lon = longitude
+        mDisposable.add(
+            rxForecastService.getWeatherForecast(
+                appId = BuildConfig.DARKSKY_APPID,
+                lat = latitude,
+                lon = longitude
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(mObserver)
         )
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribe(mObserver)
     }
 
     // need for Rx
-    fun stopRefresh() {
-        mDisposable.takeIf { ::mDisposable.isInitialized }?.let {
-            mDisposable.dispose()
-        }
-    }
+    fun stopRefresh() = mDisposable.clear()
+
 
     fun getForecastOf(dt: Long): LiveData<Forecast> = Transformations.map(forecastDao.getLive(dt)) {
         it.asDomainModel()
@@ -79,10 +84,10 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
         private var mInstance: WeatherRepository? = null
 
-        fun getInstance(dB: WeatherDb): WeatherRepository {
+        fun getInstance(dB: WeatherDb, callBack: (Boolean) -> Unit): WeatherRepository {
             synchronized(this) {
                 if (mInstance == null) {
-                    mInstance = WeatherRepository(dB)
+                    mInstance = WeatherRepository(dB, callBack)
                 }
                 return mInstance as WeatherRepository
             }
