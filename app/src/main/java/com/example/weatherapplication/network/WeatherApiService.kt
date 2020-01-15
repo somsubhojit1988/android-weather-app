@@ -14,13 +14,10 @@ const val BASE_URL = "https://api.darksky.net/"
 
 private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .baseUrl(BASE_URL).build()
-
 
 interface WeatherApiService {
     @GET("forecast/{appId}/{lat},{lon}")
+    // implicit support of co-routines (no need to add call adapter factory to Retrofit)
     suspend fun getWeatherForecastAsync(
         @Path("appId") appId: String,
         @Path("lat") lat: Double,
@@ -65,11 +62,5 @@ object AsyndWeatherForecastService : BaseRetrofitBuilder {
 
     val weatherApiService by lazy {
         service.create(WeatherApiService::class.java)
-    }
-}
-
-object WeatherForecastService {
-    val weatherReportService: WeatherApiService by lazy {
-        retrofit.create(WeatherApiService::class.java)
     }
 }

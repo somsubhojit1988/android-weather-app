@@ -2,6 +2,7 @@ package com.example.weatherapplication.overview
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.example.weatherapplication.BuildConfig
 import com.example.weatherapplication.database.WeatherDb
 import com.example.weatherapplication.model.CurrentWeather
 import com.example.weatherapplication.model.Forecast
@@ -35,8 +36,8 @@ class WeatheroverviewViewModel(application: Application) : AndroidViewModel(appl
     }
 
     private fun refreshWeatherDataFromRepo(
-        latitude: Double = 34.002470,
-        longitude: Double = -84.180720
+        latitude: Double = BuildConfig.DEFAULT_LAT,
+        longitude: Double = BuildConfig.DEFAULT_LON
     ) {
         repository.rxRefreshWeather(latitude, longitude)
     }

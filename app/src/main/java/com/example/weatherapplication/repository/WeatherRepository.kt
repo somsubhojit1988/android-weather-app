@@ -13,11 +13,9 @@ import com.example.weatherapplication.network.RxWeatherForecastService
 import com.example.weatherapplication.network.WeatherResponse
 import com.example.weatherapplication.network.asForecastEntity
 import com.example.weatherapplication.network.asWeatherEntity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.*
 
 class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
@@ -29,10 +27,6 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
 
     private lateinit var mDisposable: Disposable
 
-    private var job = Job()
-
-    private var repositoryScope = CoroutineScope(Dispatchers.IO + job)
-
     val currentWeather: LiveData<CurrentWeather> = Transformations.map(weatherDao.getToday()) {
         it?.asDomainModel()
     }
@@ -41,24 +35,20 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
         it?.asDomainModel()
     }
 
-    private suspend fun persistWeather(w: WeatherEntity) =
-        withContext(Dispatchers.IO) {
-            weatherDao.clear()
-            weatherDao.insert(w)
-        }
+    private fun persistWeather(w: WeatherEntity) {
+        weatherDao.clear()
+        weatherDao.insert(w)
+    }
 
-    private suspend fun persistForeCastList(l: List<ForecastEntity>) =
-        withContext(Dispatchers.IO) {
-            forecastDao.clear()
-            forecastDao.insert(l)
-        }
+    private fun persistForeCastList(l: List<ForecastEntity>) {
+        forecastDao.clear()
+        forecastDao.insert(l)
+    }
 
     private val mObserver = Consumer<WeatherResponse> {
         it?.let {
-            repositoryScope.launch {
-                persistWeather(it.asWeatherEntity())
-                persistForeCastList(it.asForecastEntity())
-            }
+            persistWeather(it.asWeatherEntity())
+            persistForeCastList(it.asForecastEntity())
         }
     }
 
@@ -68,7 +58,9 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
             appId = BuildConfig.DARKSKY_APPID,
             lat = latitude,
             lon = longitude
-        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
             .subscribe(mObserver)
     }
 
@@ -77,7 +69,6 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
         mDisposable.takeIf { ::mDisposable.isInitialized }?.let {
             mDisposable.dispose()
         }
-        job.cancel()
     }
 
     fun getForecastOf(dt: Long): LiveData<Forecast> = Transformations.map(forecastDao.getLive(dt)) {
@@ -96,6 +87,5 @@ class WeatherRepository private constructor(weatherDb: WeatherDb) {
                 return mInstance as WeatherRepository
             }
         }
-
     }
 }

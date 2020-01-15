@@ -26,6 +26,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "DARKSKY_APPID", DARKSKY_APPID
+        buildConfigField "Double", "DEFAULT_LAT", DEFAULT_LAT
+        buildConfigField "Double", "DEFAULT_LON", DEFAULT_LON
         multiDexEnabled true  //ADD THIS LINE
     }
     buildTypes {
